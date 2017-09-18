@@ -81,7 +81,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let hourlyCell = cell as? CollectionViewCell
         
         switch indexPath.row {
-        case extremesArray[indexPath.section].first:
+        case extremesArray[indexPath.section][0]:
             //if the cell's row is the same as the hottest index then set the text color to warm
             hourlyCell?.tempLabel.textColor = warmColor
             hourlyCell?.timeLabel.textColor = warmColor
@@ -129,7 +129,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     self.hourlyConditions.append(day)
                     //goes through the conditions for one day and looks for hottest and coldest hour
                     //and adds the index for that hour to an Array
-                    let sortedTemp:[(temp:Int,index:Int)] = day.enumerated().flatMap{(Int($0.element.temp),$0.offset)}.sorted{$0.0 > $1.0}
+                    let sortedTemp:[(temp:Int,index:Int)] = day.enumerated().flatMap{
+                        guard let number = Int($0.element.temp) else {return nil}
+                        return (temp:number,index:$0.offset)
+                        }.sorted{$0.0 > $1.0}
                     guard let hotest = sortedTemp.first?.index else {continue}
                     guard let coldest = sortedTemp.last?.index else {continue}
                     var dayExtremes: [Int] = []
