@@ -10,26 +10,44 @@ import UIKit
 
 class SettingsViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    @IBOutlet weak var textField: UITextField!
 
-        // Do any additional setup after loading the view.
+    override func viewDidLoad() {
+        super.viewDidLoad()  
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+  
+    @IBAction func setButtonPressed(_ sender: Any) {
+        guard let zipString = textField.text else {return}
+        guard Int(zipString) != nil else {
+            //zip code contains characters other than numbers
+            self.sendSimpleAlert(title: "Error", message: "Zip code not valid. Please enter numbers")
+            return
+        }
+        guard zipString.characters.count == 5 else {
+            //zip code too short or too long
+            self.sendSimpleAlert(title: "Error", message: "Zip code not the right length.")
+            return
+        }
+        //add zip to userdefaults
+        UserDefaults.standard.set(zipString, forKey: "zipString")
+        ZipSingleton.sharedZip.zip = zipString
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "getRepositories"), object: nil)
+        self.dismiss(animated: true, completion: nil)
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func sendSimpleAlert(title:String,message:String){
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let OKAction = UIAlertAction(title: "OK", style: .default) { action in
+        }
+        alertController.addAction(OKAction)
+        self.present(alertController, animated: true)
     }
-    */
+    
+    @IBAction func backButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
 
 }

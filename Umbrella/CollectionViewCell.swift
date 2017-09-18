@@ -9,5 +9,7 @@
 import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
-    
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var tempLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
 }

@@ -7,3 +7,8 @@
 //
 
 import Foundation
+
+class ZipSingleton{
+    static let sharedZip = ZipSingleton()
+    var zip: String = "60602"
+}
